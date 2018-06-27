@@ -44,7 +44,15 @@ function! ag#AgBuffer(cmd, args)
       call add(l:files, l:file)
     endif
   endfor
-  call ag#Ag(a:cmd, a:args . ' ' . join(l:files, ' '))
+
+  " If no pattern is provided, search for the word under the cursor
+  if empty(a:args)
+    let l:grepargs = expand("<cword>")
+  else
+    let l:grepargs = a:args . join(a:000, ' ')
+  end
+
+  call ag#Ag(a:cmd, l:grepargs . ' ' . join(l:files, ' '))
 endfunction
 
 function! ag#Ag(cmd, args)
